@@ -1,21 +1,32 @@
-import React from "react";
-// Contexts
-import { TodoFormContext } from "../contexts/TodoFormContext";
+import React, { useState } from "react";
 
-export default function TodoForm() {
-  const { value, setValue, handleSubmit } = React.useContext(TodoFormContext);
+export default function TodoForm(props) {
+  const [item, setItem] = useState("");
+
+  const handleChanges = e => {
+    setItem({ [e.target.name]: e.target.value });
+  };
+
+  const submitItem = e => {
+    console.log(props.addItem);
+    e.preventDefault();
+    setItem({ item: "" });
+    props.addItem(e, item);
+  };
 
   return (
     <React.Fragment>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          className="input"
-          value={value}
-          onChange={e => setValue(e.target.value)}
-          placeholder="Add a todo..."
-        />
-      </form>
+      <div>
+        <form onSubmit={submitItem}>
+          <input
+            placeholder="Add a task..."
+            type="text"
+            value={item.item}
+            name="item"
+            onChange={handleChanges}
+          />
+        </form>
+      </div>
     </React.Fragment>
   );
 }
